@@ -1,0 +1,57 @@
+{
+    "configure": {
+        "source": {
+            "always": ["SourceName", "SourceType"],
+            "conditional": {
+                "SourceType": {
+                    "ADLSGen2": ["InstanceURL"],
+                    "ASQLDB": ["SourceSchema"], 
+                    "OracleDB": ["SourceSchema"], 
+                    "OneLake":["InstanceURL"]
+                }
+            }
+        },
+        "sourcemapping": {
+            "always": ["SourceName", "ConnectionID", "SourceShortName"],
+            "conditional": {}
+        },
+        "sourceobject": {
+            "always": ["SourceName", "BatchGroupName", "BatchOrderID", "SourceObject", "SourceSchema", "LoadMode"],
+            "conditional": {
+                "LoadMode": {
+                    "Incremental": ["WatermarkColumn", "WaterMarkValue"],
+                    "Full": []
+                }
+            }
+        },
+        "standardization": {
+            "always": ["SourceName", "SourceObject","TargetSchema","TargetObject","TargetColumn"],
+            "conditionalIfEmpty": {
+                "CustomCalculation": ["SourceColumn"]
+            }
+        },
+        "transformationconfig": {
+            "always": ["TargetDomain", "TargetSchema", "TargetObject", "NotebookPath", "BatchGroupName", "BatchOrderID"],
+            "conditional": {}
+        }
+    },
+    "readmetadata": {
+        "source": {
+            "always": ["SourceName"],
+            "conditional": {}
+        },
+        "sourceobject": {
+            "always": [],
+            "optional": [ "BatchGroupName", "BatchOrderID", "SourceSchema"],
+            "conditional": {
+                "conditionalIfEmpty": {
+                    "SourceName": ["SourceObject"]
+                }
+            }
+        },
+        "standardization": {
+            "always": [],
+            "conditional": {}
+        }
+    }
+}
